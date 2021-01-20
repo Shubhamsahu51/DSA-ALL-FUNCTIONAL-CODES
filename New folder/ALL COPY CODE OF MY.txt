@@ -1,0 +1,116 @@
+#define MAX_INT 32767
+#define MIN_INT -32768
+#include <iostream>
+#include <stdlib.h>
+using namespace std;
+
+struct array {
+  int * A;
+  int size;
+  int length;
+};
+
+void Display (struct array *p) {
+    for (int i=0 ; i < p->length ;i++)
+    cout << p->A[i] << " " ;
+}
+
+
+/*void MaxArray (struct array *p) {                       // mAX ELEMENT 
+    int n = MIN_INT;
+ for (int i=0;i<=p->length-1;i++) {
+     if ( p->A[i] > n)
+     n = p->A[i];
+   }
+ cout << "max is" << n <<"\n";
+}
+
+void MinArray (struct array *p) {                      // MIN ELEMENT
+    int n = MAX_INT;
+    for (int i=0;i<=p->length-1;i++) {
+     if ( p->A[i] < n)
+     n=p->A[i];
+   }
+  cout << "min is" << n;
+}*/
+
+/*void append (struct array *p,int x) {               //append function
+    p->A[p->length]=x;
+    p->length++;           //** imp step **
+}*/
+                                                      //Reverse function
+/*void Reverse (struct array *p) {
+int temp,i,j;
+for (i=p->length-1,j=0 ; i>j ; i--,j++) {
+    temp = p->A[i];
+    p->A[i]=p->A[j];
+    p->A[j]=temp;
+}
+for (i=0;i<=p->length-1;i++)
+cout << p->A[i] << " ";
+}*/
+
+/*void insert (struct array *p,int index,int x) {     // insert function
+    for (int i = p->length ; i > index ; i-- ) {
+        p->A[i] = p->A[i-1] ;
+    }
+    p->A[index]=x;
+    p->length++;           //** imp step **
+}*/
+
+/*void Delete (struct array *p,int index) {                 // delete function
+    for (int i = index ; i < p->length-1 ; i++ ) {
+        p->A[i] = p->A[i+1] ;
+    }
+    p->length--;                                             //** imp step **
+}*/
+
+int Bsearch (struct array *p,int x) {                        //Binary search
+    int l = 0 , h = p->length-1 ,mid ;
+    while ( l <= h) {
+        mid = l+h/2;
+        if (p->A[mid] = x) 
+        return mid;
+        else if (p->A[mid] > x) 
+            h=mid-1;
+        else
+        l=mid=1;
+            
+    }
+}
+
+int main () {
+    int a[ ] = {1,2,3,4,5};
+    struct array arr={a,10,5} ;
+    
+    /*MaxArray (&arr);                                        // MAX AND MIN ELEMENT
+    MinArray (&arr);*/
+    
+    /*Reverse(&arr);*/                                        // for Reverse
+    
+    /*cout << "enter no. to append";                          // for append
+    int x; 
+    cin >> x;
+    append (&arr,x);
+    Display (&arr); */
+    
+    /*cout << "enter index and value " ;                      // for insert
+    int index,x ;
+    cin >> index >> x;
+    insert (&arr,index,x);
+    Display (&arr); */
+    
+   /* cout << "enter index element to delete" ;                //for delete
+    int index;
+    cin >> index;
+    Delete (&arr,index);
+    Display (&arr);*/
+    
+    cout << "enter value to search";                            //for Binary search
+    int x;
+    cin >> x;
+    cout << "value present at index" << Bsearch (&arr,x) ;
+    
+    
+    return 0;
+}

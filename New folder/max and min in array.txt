@@ -1,0 +1,46 @@
+#define MAX_INT 32767
+#define MIN_INT -32768
+#include <iostream>
+#include <stdlib.h>
+using namespace std;
+
+struct array {
+  int * A;
+  int size;
+  int length;
+};
+
+void MaxArray (struct array *p) {
+    int n = MIN_INT;
+ for (int i=0;i<=p->length-1;i++) {
+     if ( p->A[i] > n)
+     n = p->A[i];
+   }
+ cout << "max is" << n <<"\n";
+}
+
+void MinArray (struct array *p) {
+    int n = MAX_INT;
+    for (int i=0;i<=p->length-1;i++) {
+     if ( p->A[i] < n)
+     n=p->A[i];
+   }
+  cout << "min is" << n;
+}
+
+
+int main () {
+    struct array arr;
+    cout<<"Enter Size of Array";
+    cin >> arr.size;
+    arr.A=(int *)malloc(arr.size*sizeof(int));
+    cout << "enetr length of array";
+    cin >> arr.length;
+    for (int i=0 ; i<arr.length ;i++) {
+        cin >> arr.A[i];
+    }
+    MaxArray (&arr);
+    MinArray (&arr);
+   
+    return 0;
+}
