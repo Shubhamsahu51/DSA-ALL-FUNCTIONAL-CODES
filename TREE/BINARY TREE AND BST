@@ -1,0 +1,404 @@
+#include<stdio.h> 
+#include<stdlib.h> 
+
+struct node
+{
+    int data;
+    struct node* lchild, * rchild;
+}*root = NULL;
+
+// A utility function to create a new BST node 
+struct node* newNode(int item)
+{
+    struct node* temp = (struct node*)malloc(sizeof(struct node));
+    temp->data = item;
+    temp->lchild = temp->rchild = NULL;
+    return temp;
+}
+/* A utility function to insert a new node with given key in BST */
+struct node* insert(struct node* p, int key)                                    //insert value in tree
+{
+    /* If the tree is empty, return a new node */
+    if (p == NULL) return newNode(key);
+
+    /* Otherwise, recur down the tree */
+    if (key < p->data)
+        p->lchild = insert(p->lchild, key);
+    else
+        p->rchild = insert(p->rchild, key);
+
+    /* return the (unchanged) node pointer */
+    return p;
+}
+
+/*Traverse TREE*/
+void Preorder(struct node* p)                                           //tree traversal
+{
+    if (p)
+    {
+        printf("%d ", p->data);
+        Preorder(p->lchild);
+        Preorder(p->rchild);
+    }
+}
+void Inorder(struct node* p)
+{
+    if (p)
+    {
+        Inorder(p->lchild);
+        printf("%d ", p->data);
+        Inorder(p->rchild);
+    }
+}
+void Postorder(struct node* p)
+{
+    if (p)
+    {
+        Postorder(p->lchild);
+        Postorder(p->rchild);
+        printf("%d ", p->data);
+    }
+}
+
+/*Given a binary tree, print out all of its root-to-leaf
+ paths, one per line. Uses a recursive helper to do the work.*/
+void printPaths(struct node* node)                                                                 //print all path from root
+{
+    int path[1000];
+    printPathsRecur(node, path, 0);
+}
+
+/* Recursive helper function -- given a node, and an array containing
+ the path from the root node up to but not including this node,
+ print out all the root-leaf paths.*/
+void printPathsRecur(struct node* node, int path[], int pathLen)
+{
+    if (node == NULL)
+        return;
+
+    /* append this node to the path array */
+    path[pathLen] = node->data;
+    pathLen++;
+
+    /* it's a leaf, so print the path that led to here  */
+    if (node->lchild == NULL && node->rchild == NULL)
+    {
+        printArray(path, pathLen);
+    }
+    else
+    {
+        /* otherwise try both subtrees */
+        printPathsRecur(node->lchild, path, pathLen);
+        printPathsRecur(node->rchild, path, pathLen);
+    }
+}
+
+
+/* UTILITY FUNCTIONS */
+/* Utility that prints out an array on a line. */
+void printArray(int ints[], int len)
+{
+    int i;
+    for (i = 0; i < len; i++)
+    {
+        printf("%d ", ints[i]);
+    }
+    printf("\n");
+}
+
+/* utility that allocates a new node with the
+   given data and NULL left and right pointers. */
+
+   // A utility function to do inorder traversal of BST 
+void inorder(struct node* P)
+{
+    if (P != NULL)
+    {
+        inorder(P->lchild);
+        printf("%d ", P->data);
+        inorder(P->rchild);
+    }
+}
+
+/* function for checking height of tree */
+int Height(struct node* p) {                                         //for deletion purpose
+    int x, y;
+    if (p == NULL) return 0;
+    x = Height(p->lchild);
+    y = Height(p->rchild);
+    return x > y ? (x + 1) : (y + 1);
+}
+/* function for Inordwe predessor of deleting node*/
+struct node* Inpre(struct node* p) {
+    while (p != NULL && p->rchild != NULL) {
+        p = p->rchild;
+    }
+    return p;
+}
+/* function for Inorder successor of deleting node*/
+struct node* Insucc(struct node* p) {
+    while (p != NULL && p->lchild != NULL) {
+        p = p->lchild;
+    }
+    return p;
+}
+
+
+/* Given a binary search tree and a key, this function deletes the key
+   and returns the new root */
+struct node* deleteNode(struct node* p, int key)                               //deletion
+{
+    struct node* q;
+    // base case 
+    if (p == NULL) return p;
+    if (p->lchild == NULL && p->rchild == NULL) {
+        if (p == root) root = NULL;
+        free(p);
+        return NULL;
+    }
+
+    // If the key to be deleted is smaller than the root's key, 
+    // then it lies in left subtree 
+    if (key < p->data)
+        p->lchild = deleteNode(p->lchild, key);
+
+    // If the key to be deleted is greater than the root's key, 
+    // then it lies in right subtree 
+    else if (key > p->data)
+        p->rchild = deleteNode(p->rchild, key);
+
+    else
+    {
+        if (Height(p->lchild) > Height(p->rchild)) {
+            q = Inpre(p->lchild);
+            p->data = q->data;
+            p->lchild = deleteNode(p->lchild, q->data);
+        }
+        else {
+            q = Insucc(p->rchild);
+            p->data = q->data;
+            p->rchild = deleteNode(p->rchild, q->data);
+        }
+    }
+    return p;
+}
+
+
+/* iterative function for searching key value in tree*/
+struct node* Search(int key) {
+    struct node* t = root;
+    while (t != NULL) {
+        if (key == t->data) {
+            return t;
+        }
+        else if (key < t->data) {
+            t = t->lchild;
+        }
+        else {
+            t = t->rchild;
+        }
+    }
+    return NULL;
+}
+
+/* count nodes and sum them*/
+int Countallnodes(struct node* p) {                                      //count nodes and sum them
+    int x;
+    int y;
+    if (p != NULL) {
+        x = Countallnodes(p->lchild);
+        y = Countallnodes(p->rchild);
+        return x + y + 1;
+    }
+    return 0;
+}
+
+int Sumofallnodes(node* p) {
+    int x;
+    int y;
+    if (p != NULL) {
+        x = Sumofallnodes(p->lchild);
+        y = Sumofallnodes(p->rchild);
+        return x + y + p->data;
+    }
+    return 0;
+}
+
+int deg2NodeCount(node* p) {
+    int x;
+    int y;
+    if (p != NULL) {
+        x = deg2NodeCount(p->lchild);
+        y = deg2NodeCount(p->rchild);
+        if (p->lchild && p->rchild) {
+            return x + y + 1;
+        }
+        else {
+            return x + y;
+        }
+    }
+    return 0;
+}
+
+int Sumofdeg2NodeCount(node* p) {
+    int x;
+    int y;
+    if (p != NULL) {
+        x = Sumofdeg2NodeCount(p->lchild);
+        y = Sumofdeg2NodeCount(p->rchild);
+        if (p->lchild && p->rchild) {
+            return x + y + p->data;
+        }
+        else {
+            return x + y;
+        }
+    }
+    return 0;
+}
+
+
+int deg1NodeCount(node* p) {
+    int x;
+    int y;
+    if (p != NULL) {
+        x = deg1NodeCount(p->lchild);
+        y = deg1NodeCount(p->rchild);
+        if (p->lchild != NULL ^ p->rchild != NULL) {
+            return x + y + 1;
+        }
+        else {
+            return x + y;
+        }
+    }
+    return 0;
+}
+
+
+int Sumofdeg1NodeCount(node* p) {
+    int x;
+    int y;
+    if (p != NULL) {
+        x = Sumofdeg1NodeCount(p->lchild);
+        y = Sumofdeg1NodeCount(p->rchild);
+        if (p->lchild != NULL ^ p->rchild != NULL) {
+            return x + y + p->data;
+        }
+        else {
+            return x + y;
+        }
+    }
+    return 0;
+}
+
+int leafNodeCount(node* p) {
+    int x;
+    int y;
+    if (p != NULL) {
+        x = leafNodeCount(p->lchild);
+        y = leafNodeCount(p->rchild);
+        if (p->lchild == NULL && p->rchild == NULL) {
+            return x + y + 1;
+        }
+        else {
+            return x + y;
+        }
+    }
+    return 0;
+}
+
+int SumofleafNodeCount(node* p) {
+    int x;
+    int y;
+    if (p != NULL) {
+        x = SumofleafNodeCount(p->lchild);
+        y = SumofleafNodeCount(p->rchild);
+        if (p->lchild == NULL && p->rchild == NULL) {
+            return x + y + p->data;
+        }
+        else {
+            return x + y;
+        }
+    }
+    return 0;
+}
+
+int deg1ordeg2NodeCount(node* p) {
+    int x;
+    int y;
+    if (p != NULL) {
+        x = deg1ordeg2NodeCount(p->lchild);
+        y = deg1ordeg2NodeCount(p->rchild);
+        if (p->lchild != NULL || p->rchild != NULL) {
+            return x + y + 1;
+        }
+        else {
+            return x + y;
+        }
+    }
+    return 0;
+}
+
+int Sumofdeg1ordeg2NodeCount(node* p) {
+    int x;
+    int y;
+    if (p != NULL) {
+        x = Sumofdeg1ordeg2NodeCount(p->lchild);
+        y = Sumofdeg1ordeg2NodeCount(p->rchild);
+        if (p->lchild != NULL || p->rchild != NULL) {
+            return x + y + p->data;
+        }
+        else {
+            return x + y;
+        }
+    }
+    return 0;
+}
+
+
+
+
+// Driver Program to test above functions 
+int main()
+{
+
+    /* Let us create following BST
+               50
+            /     \
+           30      70
+          /  \    /  \
+        20   40  60   80 */
+    root = insert(root, 50);
+    insert(root, 30);
+    insert(root, 20);
+    insert(root, 40);
+    insert(root, 70);
+    insert(root, 60);
+    insert(root, 80);
+    printf("count of all nodes is %d \n", Countallnodes(root));
+    printf("sum is %d", Sumofallnodes(root));
+
+    printf("\n");
+
+    printf("count of all deg2NodeCount is %d \n", deg2NodeCount(root));
+    printf("sum is %d", Sumofdeg2NodeCount(root));
+
+    printf("\n");
+
+    printf("count of all deg1NodeCount is %d \n", deg1NodeCount(root));
+    printf("sum is %d", Sumofdeg1NodeCount(root));
+
+    printf("\n");
+
+    printf("count of all leafNodeCount is %d \n", leafNodeCount(root));
+    printf("sum is %d", SumofleafNodeCount(root));
+
+    printf("\n");
+
+    printf("count of all deg1ordeg2NodeCount is %d \n", deg1ordeg2NodeCount(root));
+    printf("sum is %d", Sumofdeg1ordeg2NodeCount(root));
+
+
+
+    
+    return 0;
+}
